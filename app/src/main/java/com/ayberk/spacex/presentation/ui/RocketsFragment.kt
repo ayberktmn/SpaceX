@@ -8,19 +8,24 @@ import android.view.ViewGroup
 import com.ayberk.spacex.R
 
 
-class MainFragment : Fragment() {
-
+class RocketsFragment : Fragment() {
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
 
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_rockets, container, false)
     }
+
 }
