@@ -8,13 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
 import com.ayberk.spacex.R
 import com.ayberk.spacex.databinding.FragmentHomeBinding
 import com.google.android.material.bottomappbar.BottomAppBar
+import dagger.hilt.android.AndroidEntryPoint
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
-
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -40,12 +42,8 @@ class HomeFragment : Fragment() {
                     newTab: AnimatedBottomBar.Tab
                 ) {
                     when (newIndex) {
-                        0 -> childFragmentManager.primaryNavigationFragment?.findNavController()
-                            ?.navigate(R.id.rocketsFragment)
-                        1 ->
-                        childFragmentManager.primaryNavigationFragment?.findNavController()
-                            ?.navigate(R.id.crewFragment)
-                        // Diğer sekmeler için gerekirse daha fazla durumu ekleyin
+                        0 -> navigateToFragment(R.id.rocketsFragment)
+                        1 -> navigateToFragment(R.id.crewFragment)
                     }
                     Log.d("bottom_bar", "Selected index: $newIndex, title: ${newTab.title}")
                 }
@@ -60,11 +58,10 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    private fun replaceFragment(actionId: Int) {
-        val navController = findNavController()
-        navController.navigate(actionId)
+    private fun navigateToFragment(fragmentId: Int) {
+        val navController = childFragmentManager.primaryNavigationFragment?.findNavController()
+        navController?.navigate(fragmentId)
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
