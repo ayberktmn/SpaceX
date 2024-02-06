@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_nav"
-    app:startDestination="@id/detailsFragment">
+    app:startDestination="@id/rocketsFragment">
 
     <fragment
         android:id="@+id/detailsFragment"
@@ -18,14 +18,14 @@
         android:id="@+id/crewFragment"
         android:name="com.ayberk.spacex.presentation.ui.CrewFragment"
         android:label="fragment_crew"
-        tools:layout="@layout/fragment_crew" >
-        <action
-            android:id="@+id/action_crewFragment_to_rocketsFragment"
-            app:destination="@id/rocketsFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_crew" />
     <fragment
         android:id="@+id/rocketsFragment"
         android:name="com.ayberk.spacex.presentation.ui.RocketsFragment"
         android:label="fragment_rockets"
-        tools:layout="@layout/fragment_rockets" />
+        tools:layout="@layout/fragment_rockets" >
+        <action
+            android:id="@+id/action_rocketsFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
 </navigation>

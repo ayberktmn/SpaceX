@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ayberk.spacex.R
+import com.ayberk.spacex.databinding.FragmentDetailsBinding
 
 
 class DetailsFragment : Fragment() {
 
+    private var _binding: FragmentDetailsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,31 +1,88 @@
 package com.ayberk.spacex.presentation.ui
 
+import RocketAdapter
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ayberk.spacex.R
+import android.widget.Toast
+import androidx.activity.addCallback
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.ayberk.spacex.databinding.FragmentRocketsBinding
+import com.ayberk.spacex.presentation.models.rockets.Rockets
+import com.ayberk.spacex.presentation.models.rockets.RocketsItem
+import com.ayberk.spacex.presentation.viewmodel.RocketViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class RocketsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
+    private var _binding: FragmentRocketsBinding? = null
+    private val binding get() = _binding!!
 
-        }
-    }
+    private val viewModel: RocketViewModel by viewModels()
+    private lateinit var rocketAdapter: RocketAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_rockets, container, false)
+        _binding = FragmentRocketsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            // Add onBackPressed callback logic here if needed
+        }
+        viewModel.getRockets()
+        initObserver()
+    }
+
+    private fun initObserver() {
+        viewModel.rocketState.observe(viewLifecycleOwner) { state ->
+            state.rocketsList?.let { rocketsList ->
+                if (rocketsList.isNotEmpty()) {
+                    setupRecyclerView(rocketsList)
+                } else {
+                    println("rocketsList boş veya null.")
+                }
+            }
+            state.errorMessage?.let {
+                showErrorToast(it)
+                println("Recycler error")
+            }
+        }
+    }
+
+    private fun showErrorToast(errorMessage: String) {
+        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+    }
+
+
+    private fun setupRecyclerView(rocketsList: List<RocketsItem>) {
+        // RecyclerView'a adapter atanır
+        rocketAdapter = RocketAdapter()
+        binding.rcyclerRockets.adapter = rocketAdapter
+
+        // RecyclerView'in boyutunu değiştirmeyecek şekilde sabitlenir
+        binding.rcyclerRockets.setHasFixedSize(true)
+
+        // LinearLayoutManager atanır (dikey düzen)
+        val layoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
+        binding.rcyclerRockets.layoutManager = layoutManager
+
+        // Adapter'a veri atanır
+        rocketAdapter.setrocketsList(rocketsList)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
