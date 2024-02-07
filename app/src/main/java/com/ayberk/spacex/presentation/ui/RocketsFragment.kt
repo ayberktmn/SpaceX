@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -67,7 +68,13 @@ class RocketsFragment : Fragment() {
 
     private fun setupRecyclerView(rocketsList: List<RocketsItem>) {
         // RecyclerView'a adapter atanır
-        rocketAdapter = RocketAdapter()
+        rocketAdapter = RocketAdapter(
+            onDetailsClick = {
+                val action = RocketsFragmentDirections.actionRocketsFragmentToDetailsFragment(it)
+                findNavController().navigate(action)
+                println("gönderilen rocket list: ${it}")
+            },
+        )
         binding.rcyclerRockets.adapter = rocketAdapter
 
         // RecyclerView'in boyutunu değiştirmeyecek şekilde sabitlenir
