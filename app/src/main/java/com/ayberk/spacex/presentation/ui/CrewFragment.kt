@@ -1,4 +1,3 @@
-
 package com.ayberk.spacex.presentation.ui
 
 import android.os.Bundle
@@ -18,7 +17,6 @@ class CrewFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        println("aa")
     }
 
     override fun onCreateView(

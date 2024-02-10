@@ -1,11 +1,14 @@
 package com.ayberk.spacex.presentation.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,8 +36,8 @@ class DetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentDetailsBinding.inflate(inflater,container,false)
+    ): View {
+        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
 
         detailsRocket()
 
@@ -42,7 +45,7 @@ class DetailsFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun detailsRocket(){
+    fun detailsRocket() {
         val details = args.rocketId
 
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -52,20 +55,40 @@ class DetailsFragment : Fragment() {
         val time = dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
 
 
-        with(binding){
+        with(binding) {
             txtName.text = details.name
             txtDetails.text = details.details
             txtTime.text = time
             txtDate.text = date
 
-            if (txtDetails.text.isBlank()){
+            if (txtDetails.text.isBlank()) {
                 txtDetails.text = "Details Blank"
             }
 
             Glide.with(imgRocketDetails)
                 .load(details.links?.patch?.large)
+                .error(R.drawable.rocketdetails)
                 .into(imgRocketDetails)
 
+            imgWikipedia.setOnClickListener {
+                val wikipediaLink = details.links?.wikipedia
+                openLink(wikipediaLink)
+            }
+
+            imgYoutube.setOnClickListener {
+                val youtubeLink = details.links?.webcast
+                openLink(youtubeLink)
+            }
+        }
+    }
+
+    fun openLink(Link: String?) {
+        Link?.let { link ->
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+            startActivity(intent)
+        } ?: run {
+            // link null ise kullanıcıya uyarı ver
+            Toast.makeText(requireContext(), "Bağlantı bulunamadı.", Toast.LENGTH_SHORT).show()
         }
     }
 }

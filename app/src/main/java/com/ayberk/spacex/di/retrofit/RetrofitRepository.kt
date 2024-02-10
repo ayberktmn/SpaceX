@@ -5,8 +5,8 @@ import com.ayberk.spacex.presentation.models.rockets.Rockets
 import javax.inject.Inject
 
 class RetrofitRepository @Inject constructor(
-    private val retrofitServiceInstance: RetrofitServiceInstance
-){
+    private val retrofitServiceInstance: RetrofitServiceInstance,
+) {
     suspend fun getRockets(): Resource<Rockets> {
         return try {
             val response = retrofitServiceInstance.getRockets()

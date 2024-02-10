@@ -7,7 +7,8 @@ import com.ayberk.spacex.presentation.models.rockets.Rockets
 import com.ayberk.spacex.presentation.models.rockets.RocketsItem
 import com.bumptech.glide.Glide
 
-class RocketAdapter(  private val onDetailsClick: (RocketsItem) -> Unit,) : RecyclerView.Adapter<RocketAdapter.RocketViewHolder>() {
+class RocketAdapter(private val onDetailsClick: (RocketsItem) -> Unit) :
+    RecyclerView.Adapter<RocketAdapter.RocketViewHolder>() {
 
     private var rocketsList: List<RocketsItem>? = null
 
@@ -29,7 +30,8 @@ class RocketAdapter(  private val onDetailsClick: (RocketsItem) -> Unit,) : Recy
         return rocketsList?.size ?: 0
     }
 
-    inner class RocketViewHolder(private val binding: ItemRocketsBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class RocketViewHolder(private val binding: ItemRocketsBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(rocket: RocketsItem) {
             binding.apply {
@@ -37,9 +39,7 @@ class RocketAdapter(  private val onDetailsClick: (RocketsItem) -> Unit,) : Recy
                     onDetailsClick(rocket)
                 }
                 txtRocket.text = rocket.name
-                Glide.with(imgRocket)
-                    .load(rocket.links?.patch?.large)
-                    .error(R.drawable.rocket)
+                Glide.with(imgRocket).load(rocket.links?.patch?.large).error(R.drawable.rocket)
                     .into(imgRocket)
             }
         }
