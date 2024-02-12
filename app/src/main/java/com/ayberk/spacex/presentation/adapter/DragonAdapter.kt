@@ -40,6 +40,9 @@ class DragonAdapter : RecyclerView.Adapter<DragonAdapter.DragonViewHolder>() {
         fun bind(dragon: DragonsItem) {
             binding.apply {
 
+                val tempInCelsius = dragon.heat_shield.temp_degrees - 273.15 // Kelvin'i Celsius'a dönüştürmek için 273.15'i çıkarın
+                val formattedTemp = "%.2f".format(tempInCelsius) // Sıcaklık değerini iki ondalık basamakla formatlayın
+
                 txtname.text = dragon.name
                 Glide.with(imgDragon)
                     .load(dragon.flickr_images[0])
@@ -48,7 +51,9 @@ class DragonAdapter : RecyclerView.Adapter<DragonAdapter.DragonViewHolder>() {
                     .into(imgDragon)
 
                 txtKg.text = "Kilogram: " + dragon.dry_mass_kg.toString()
-                txtHeight.text = "Height: " +dragon.launch_payload_mass.lb.toString()
+                txtHeight.text = "Height: " + dragon.launch_payload_mass.lb.toString()
+                txtDegrees.text = "Sıcaklık: $formattedTemp"
+                txtCrewCapacity.text = "Crew Capacity: " + dragon.crew_capacity.toString()
 
                 when(dragon.heat_shield.dev_partner){
                     "NASA" ->  imgDragon.setImageResource(R.drawable.nasa)
