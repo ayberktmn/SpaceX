@@ -7,40 +7,40 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.ayberk.spacex.R
-import com.ayberk.spacex.databinding.FragmentCrewBinding
-import com.ayberk.spacex.databinding.FragmentRocketsBinding
+import com.ayberk.spacex.databinding.FragmentCrewdragonBinding
 import com.ayberk.spacex.presentation.adapter.CrewAdapter
+import com.ayberk.spacex.presentation.adapter.DragonAdapter
 import com.ayberk.spacex.presentation.models.crew.CrewItem
-import com.ayberk.spacex.presentation.models.rockets.RocketsItem
+import com.ayberk.spacex.presentation.models.dragons.DragonsItem
 import com.ayberk.spacex.presentation.viewmodel.CrewViewModel
-import com.ayberk.spacex.presentation.viewmodel.RocketViewModel
+import com.ayberk.spacex.presentation.viewmodel.DragonViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CrewFragment : Fragment() {
+class CrewDragonFragment : Fragment() {
 
-    private var _binding: FragmentCrewBinding? = null
+    private var _binding: FragmentCrewdragonBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: CrewViewModel by viewModels()
     private lateinit var crewAdapter: CrewAdapter
 
+    private val viewModelDragon: DragonViewModel by viewModels()
+    private lateinit var dragonAdapter: DragonAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        _binding = FragmentCrewBinding.inflate(inflater, container, false)
+        _binding = FragmentCrewdragonBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getCrews()
+        viewModelDragon.getDragons()
         initObserver()
     }
 
@@ -50,7 +50,20 @@ class CrewFragment : Fragment() {
                 if (crewList.isNotEmpty()) {
                     setupRecyclerView(crewList)
                 } else {
-                    println("rocketsList boş veya null.")
+                    println("crewList boş veya null.")
+                }
+            }
+            state.errorMessage?.let {
+                showErrorToast(it)
+                println("Recycler error")
+            }
+        }
+        viewModelDragon.dragonState.observe(viewLifecycleOwner) { state ->
+            state.dragonList?.let { dragonList ->
+                if (dragonList.isNotEmpty()) {
+                    setupDragonRecyclerView(dragonList)
+                } else {
+                    println("dragonList boş veya null.")
                 }
             }
             state.errorMessage?.let {
@@ -79,6 +92,22 @@ class CrewFragment : Fragment() {
 
         // Adapter'a veri atanır
         crewAdapter.setcrewList(rocketsList)
+    }
+
+    private fun setupDragonRecyclerView(dragonList: List<DragonsItem>) {
+        // RecyclerView'a adapter atanır
+        dragonAdapter = DragonAdapter()
+        binding.rcyclerDragon.adapter = dragonAdapter
+
+        // RecyclerView'in boyutunu değiştirmeyecek şekilde sabitlenir
+        binding.rcyclerDragon.setHasFixedSize(true)
+
+        // LinearLayoutManager atanır (dikey düzen)
+        val lmHVertical = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+        binding.rcyclerDragon.layoutManager = lmHVertical
+
+        // Adapter'a veri atanır
+        dragonAdapter.setDragonList(dragonList)
     }
 
     override fun onDestroyView() {

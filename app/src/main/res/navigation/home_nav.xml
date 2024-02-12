@@ -19,9 +19,9 @@
     </fragment>
     <fragment
         android:id="@+id/crewFragment"
-        android:name="com.ayberk.spacex.presentation.ui.CrewFragment"
+        android:name="com.ayberk.spacex.presentation.ui.CrewDragonFragment"
         android:label="fragment_crew"
-        tools:layout="@layout/fragment_crew" />
+        tools:layout="@layout/fragment_crewdragon" />
     <fragment
         android:id="@+id/rocketsFragment"
         android:name="com.ayberk.spacex.presentation.ui.RocketsFragment"
