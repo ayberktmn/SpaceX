@@ -1,55 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".presentation.ui.CrewDragonFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcyclerCrew"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="300dp" >
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="255dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="200dp"
+        app:cardCornerRadius="20dp"> <!-- İstenilen corner radius değeri -->
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="255dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:isScrollContainer="false"
+            android:minHeight="?attr/actionBarSize"
+            android:pointerIcon="cell"
+            android:theme="?attr/actionBarTheme">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/toolbarText"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="15dp" />
+
+        </androidx.appcompat.widget.Toolbar>
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcyclerDragon"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        android:layout_width="409dp"
+        android:layout_height="446dp"
+        android:layout_marginTop="16dp" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="?attr/colorPrimary"
-        android:isScrollContainer="false"
-        android:minHeight="?attr/actionBarSize"
-        android:pointerIcon="cell"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintBottom_toTopOf="@+id/rcyclerDragon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rcyclerCrew">
-
-        <!-- TextView ekleyerek metin ekleme -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/toolbarText"
-            android:textColor="#fff"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="15dp" />
-
-    </androidx.appcompat.widget.Toolbar>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

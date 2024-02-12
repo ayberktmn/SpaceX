@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ayberk.spacex.R
 import com.ayberk.spacex.databinding.ItemDragonsBinding
-import com.ayberk.spacex.presentation.models.crew.CrewItem
-import com.ayberk.spacex.presentation.models.dragons.DragonsItem
+import com.ayberk.spacex.data.models.crew.CrewItem
+import com.ayberk.spacex.data.models.dragons.DragonsItem
 import com.bumptech.glide.Glide
 
 class DragonAdapter : RecyclerView.Adapter<DragonAdapter.DragonViewHolder>() {
 
-    private var dragonList: List<DragonsItem>? = null
+    private var dragonList: List<com.ayberk.spacex.data.models.dragons.DragonsItem>? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -37,8 +37,11 @@ class DragonAdapter : RecyclerView.Adapter<DragonAdapter.DragonViewHolder>() {
     inner class DragonViewHolder (private val binding: ItemDragonsBinding) :
         RecyclerView.ViewHolder(binding.root){
 
-        fun bind(dragon: DragonsItem) {
+        fun bind(dragon: com.ayberk.spacex.data.models.dragons.DragonsItem) {
             binding.apply {
+
+                val tempInCelsius = dragon.heat_shield.temp_degrees - 273.15 // Kelvin'i Celsius'a dönüştürmek için 273.15'i çıkarın
+                val formattedTemp = "%.2f".format(tempInCelsius) // Sıcaklık değerini iki ondalık basamakla formatlayın
 
                 txtname.text = dragon.name
                 Glide.with(imgDragon)
@@ -48,7 +51,9 @@ class DragonAdapter : RecyclerView.Adapter<DragonAdapter.DragonViewHolder>() {
                     .into(imgDragon)
 
                 txtKg.text = "Kilogram: " + dragon.dry_mass_kg.toString()
-                txtHeight.text = "Height: " +dragon.launch_payload_mass.lb.toString()
+                txtHeight.text = "Height: " + dragon.launch_payload_mass.lb.toString()
+                txtDegrees.text = "Sıcaklık: $formattedTemp"
+                txtCrewCapacity.text = "Crew Capacity: " + dragon.crew_capacity.toString()
 
                 when(dragon.heat_shield.dev_partner){
                     "NASA" ->  imgDragon.setImageResource(R.drawable.nasa)
@@ -57,7 +62,7 @@ class DragonAdapter : RecyclerView.Adapter<DragonAdapter.DragonViewHolder>() {
         }
     }
 
-    fun setDragonList(newList: List<DragonsItem>) {
+    fun setDragonList(newList: List<com.ayberk.spacex.data.models.dragons.DragonsItem>) {
         dragonList = newList
         notifyDataSetChanged()
     }

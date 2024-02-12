@@ -1,7 +1,7 @@
 package com.ayberk.spacex.di.module
 
 import com.ayberk.spacex.common.Constans.BASE_URL
-import com.ayberk.spacex.di.retrofit.RetrofitServiceInstance
+import com.ayberk.spacex.data.retrofit.RetrofitServiceInstance
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module

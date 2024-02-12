@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ayberk.spacex.common.Resource
-import com.ayberk.spacex.di.retrofit.RetrofitRepository
-import com.ayberk.spacex.presentation.models.crew.CrewItem
-import com.ayberk.spacex.presentation.models.dragons.DragonsItem
+import com.ayberk.spacex.data.retrofit.RetrofitRepository
+import com.ayberk.spacex.data.models.crew.CrewItem
+import com.ayberk.spacex.data.models.dragons.DragonsItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,6 +53,6 @@ class DragonViewModel @Inject  constructor(private val repository: RetrofitRepos
 
 data class DragonState(
     val isLoading: Boolean = false,
-    val dragonList: List<DragonsItem> = emptyList(),
+    val dragonList: List<com.ayberk.spacex.data.models.dragons.DragonsItem> = emptyList(),
     val errorMessage: String? = null
 )

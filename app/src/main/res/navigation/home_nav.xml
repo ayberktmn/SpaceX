@@ -15,7 +15,7 @@
             app:destination="@id/crewFragment" />
         <argument
             android:name="rocketId"
-            app:argType="com.ayberk.spacex.presentation.models.rockets.RocketsItem" />
+            app:argType="com.ayberk.spacex.data.models.rockets.RocketsItem" />
     </fragment>
     <fragment
         android:id="@+id/crewFragment"

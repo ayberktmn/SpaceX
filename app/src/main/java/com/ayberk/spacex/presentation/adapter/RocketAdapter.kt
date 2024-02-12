@@ -3,14 +3,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ayberk.spacex.R
 import com.ayberk.spacex.databinding.ItemRocketsBinding
-import com.ayberk.spacex.presentation.models.rockets.Rockets
-import com.ayberk.spacex.presentation.models.rockets.RocketsItem
+import com.ayberk.spacex.data.models.rockets.Rockets
+import com.ayberk.spacex.data.models.rockets.RocketsItem
 import com.bumptech.glide.Glide
 
-class RocketAdapter(private val onDetailsClick: (RocketsItem) -> Unit) :
+class RocketAdapter(private val onDetailsClick: (com.ayberk.spacex.data.models.rockets.RocketsItem) -> Unit) :
     RecyclerView.Adapter<RocketAdapter.RocketViewHolder>() {
 
-    private var rocketsList: List<RocketsItem>? = null
+    private var rocketsList: List<com.ayberk.spacex.data.models.rockets.RocketsItem>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RocketViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -33,7 +33,7 @@ class RocketAdapter(private val onDetailsClick: (RocketsItem) -> Unit) :
     inner class RocketViewHolder(private val binding: ItemRocketsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(rocket: RocketsItem) {
+        fun bind(rocket: com.ayberk.spacex.data.models.rockets.RocketsItem) {
             binding.apply {
                 linearRocket.setOnClickListener {
                     onDetailsClick(rocket)
@@ -45,7 +45,7 @@ class RocketAdapter(private val onDetailsClick: (RocketsItem) -> Unit) :
         }
     }
 
-    fun setrocketsList(newList: List<RocketsItem>) {
+    fun setrocketsList(newList: List<com.ayberk.spacex.data.models.rockets.RocketsItem>) {
         rocketsList = newList
         notifyDataSetChanged()
     }

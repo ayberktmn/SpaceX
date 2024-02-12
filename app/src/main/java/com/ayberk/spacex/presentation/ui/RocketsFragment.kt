@@ -2,6 +2,8 @@ package com.ayberk.spacex.presentation.ui
 
 import RocketAdapter
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +16,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ayberk.spacex.databinding.FragmentRocketsBinding
-import com.ayberk.spacex.presentation.models.rockets.Rockets
-import com.ayberk.spacex.presentation.models.rockets.RocketsItem
+import com.ayberk.spacex.data.models.rockets.Rockets
+import com.ayberk.spacex.data.models.rockets.RocketsItem
 import com.ayberk.spacex.presentation.viewmodel.RocketViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,6 +29,7 @@ class RocketsFragment : Fragment() {
 
     private val viewModel: RocketViewModel by viewModels()
     private lateinit var rocketAdapter: RocketAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,23 +45,38 @@ class RocketsFragment : Fragment() {
             // Add onBackPressed callback logic here if needed
         }
         viewModel.getRockets()
-        initObserver()
+        initObservers()
     }
 
-    private fun initObserver() {
+    private fun initObservers() {
         viewModel.rocketState.observe(viewLifecycleOwner) { state ->
-            state.rocketsList?.let { rocketsList ->
-                if (rocketsList.isNotEmpty()) {
-                    setupRecyclerView(rocketsList)
-                } else {
-                    println("rocketsList boş veya null.")
+            if (state.isLoading) {
+                showLoadingIndicator()
+            } else {
+                hideLoadingIndicator()
+                state.rocketsList?.let { rocketsList ->
+                    if (rocketsList.isNotEmpty()) {
+                        setupRecyclerView(rocketsList)
+                    } else {
+                        println("rocketsList boş veya null.")
+                    }
+                }
+                state.errorMessage?.let {
+                    showErrorToast(it)
+                    println("Recycler error")
                 }
             }
-            state.errorMessage?.let {
-                showErrorToast(it)
-                println("Recycler error")
-            }
         }
+    }
+
+    private fun showLoadingIndicator() {
+        // Show loading indicator
+        binding.lottieAnimationView.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingIndicator() {
+        // Hide loading indicator
+        binding.lottieAnimationView.visibility = View.GONE
     }
 
     private fun showErrorToast(errorMessage: String) {
@@ -66,7 +84,7 @@ class RocketsFragment : Fragment() {
     }
 
 
-    private fun setupRecyclerView(rocketsList: List<RocketsItem>) {
+    private fun setupRecyclerView(rocketsList: List<com.ayberk.spacex.data.models.rockets.RocketsItem>) {
         // RecyclerView'a adapter atanır
         rocketAdapter = RocketAdapter(
             onDetailsClick = {

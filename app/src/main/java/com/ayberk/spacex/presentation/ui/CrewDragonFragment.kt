@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayberk.spacex.databinding.FragmentCrewdragonBinding
 import com.ayberk.spacex.presentation.adapter.CrewAdapter
 import com.ayberk.spacex.presentation.adapter.DragonAdapter
-import com.ayberk.spacex.presentation.models.crew.CrewItem
-import com.ayberk.spacex.presentation.models.dragons.DragonsItem
+import com.ayberk.spacex.data.models.crew.CrewItem
+import com.ayberk.spacex.data.models.dragons.DragonsItem
 import com.ayberk.spacex.presentation.viewmodel.CrewViewModel
 import com.ayberk.spacex.presentation.viewmodel.DragonViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,7 +78,7 @@ class CrewDragonFragment : Fragment() {
     }
 
 
-    private fun setupRecyclerView(rocketsList: List<CrewItem>) {
+    private fun setupRecyclerView(rocketsList: List<com.ayberk.spacex.data.models.crew.CrewItem>) {
         // RecyclerView'a adapter atanır
         crewAdapter = CrewAdapter()
         binding.rcyclerCrew.adapter = crewAdapter
@@ -94,7 +94,7 @@ class CrewDragonFragment : Fragment() {
         crewAdapter.setcrewList(rocketsList)
     }
 
-    private fun setupDragonRecyclerView(dragonList: List<DragonsItem>) {
+    private fun setupDragonRecyclerView(dragonList: List<com.ayberk.spacex.data.models.dragons.DragonsItem>) {
         // RecyclerView'a adapter atanır
         dragonAdapter = DragonAdapter()
         binding.rcyclerDragon.adapter = dragonAdapter

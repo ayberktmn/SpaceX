@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ayberk.spacex.R
 import com.ayberk.spacex.databinding.ItemCrewBinding
-import com.ayberk.spacex.presentation.models.crew.CrewItem
-import com.ayberk.spacex.presentation.models.rockets.RocketsItem
+import com.ayberk.spacex.data.models.crew.CrewItem
+import com.ayberk.spacex.data.models.rockets.RocketsItem
 import com.bumptech.glide.Glide
 
 class CrewAdapter : RecyclerView.Adapter<CrewAdapter.CrewViewHolder>() {
 
-    private var crewList: List<CrewItem>? = null
+    private var crewList: List<com.ayberk.spacex.data.models.crew.CrewItem>? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -37,7 +37,7 @@ class CrewAdapter : RecyclerView.Adapter<CrewAdapter.CrewViewHolder>() {
     inner class CrewViewHolder (private val binding: ItemCrewBinding) :
         RecyclerView.ViewHolder(binding.root){
 
-        fun bind(crew: CrewItem) {
+        fun bind(crew: com.ayberk.spacex.data.models.crew.CrewItem) {
             binding.apply {
 
                 txtCrew.text = crew.name
@@ -48,6 +48,7 @@ class CrewAdapter : RecyclerView.Adapter<CrewAdapter.CrewViewHolder>() {
                     .into(imgCrew)
 
                 when(crew.agency){
+
                     "NASA" ->  imgAgency.setImageResource(R.drawable.nasa)
                     "Axiom Space"-> imgAgency.setImageResource(R.drawable.axiomspace)
                     "SpaceX"-> imgAgency.setImageResource(R.drawable.spacex)
@@ -59,9 +60,8 @@ class CrewAdapter : RecyclerView.Adapter<CrewAdapter.CrewViewHolder>() {
         }
     }
 
-    fun setcrewList(newList: List<CrewItem>) {
+    fun setcrewList(newList: List<com.ayberk.spacex.data.models.crew.CrewItem>) {
         crewList = newList
         notifyDataSetChanged()
     }
-
 }
