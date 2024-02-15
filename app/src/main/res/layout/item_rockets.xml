@@ -42,6 +42,15 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+
+        <ImageView
+            android:id="@+id/imgFavorite"
+            android:layout_width="52dp"
+            android:layout_height="30dp"
+            android:layout_gravity="right"
+            android:paddingTop="5dp"
+            android:src="@drawable/favorite" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

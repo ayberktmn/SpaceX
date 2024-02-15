@@ -2,13 +2,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ayberk.spacex.R
+import com.ayberk.spacex.data.models.rockets.FavoriteRockets
 import com.ayberk.spacex.databinding.ItemRocketsBinding
-import com.ayberk.spacex.data.models.rockets.Rockets
-import com.ayberk.spacex.data.models.rockets.RocketsItem
+import com.ayberk.spacex.presentation.ui.RocketEvent
 import com.bumptech.glide.Glide
 
-class RocketAdapter(private val onDetailsClick: (com.ayberk.spacex.data.models.rockets.RocketsItem) -> Unit) :
-    RecyclerView.Adapter<RocketAdapter.RocketViewHolder>() {
+class RocketAdapter(
+    private val onDetailsClick: (com.ayberk.spacex.data.models.rockets.RocketsItem) -> Unit,
+    private val event: (RocketEvent) -> Unit
+) : RecyclerView.Adapter<RocketAdapter.RocketViewHolder>() {
 
     private var rocketsList: List<com.ayberk.spacex.data.models.rockets.RocketsItem>? = null
 
@@ -35,17 +37,27 @@ class RocketAdapter(private val onDetailsClick: (com.ayberk.spacex.data.models.r
 
         fun bind(rocket: com.ayberk.spacex.data.models.rockets.RocketsItem) {
             binding.apply {
-                linearRocket.setOnClickListener {
+
+                cardRocket.setOnClickListener {
                     onDetailsClick(rocket)
                 }
+
                 txtRocket.text = rocket.name
-                Glide.with(imgRocket).load(rocket.links?.patch?.large).error(R.drawable.rocket)
+                Glide.with(imgRocket)
+                    .load(rocket.links?.patch?.large)
+                    .error(R.drawable.rocket)
                     .into(imgRocket)
+
+                binding.imgFavorite.setOnClickListener {
+                    val id = rocket.id.toIntOrNull() ?: 0 // Varsayılan bir değer atayın
+                    println("Tıklandı : $id")
+                    event(RocketEvent.UpsertDeleteArticle(FavoriteRockets(id, rocket.name)))
+                }
             }
         }
     }
 
-    fun setrocketsList(newList: List<com.ayberk.spacex.data.models.rockets.RocketsItem>) {
+    fun setRocketsList(newList: List<com.ayberk.spacex.data.models.rockets.RocketsItem>) {
         rocketsList = newList
         notifyDataSetChanged()
     }

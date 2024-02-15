@@ -80,4 +80,8 @@ dependencies {
 
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     implementation ("nl.joery.animatedbottombar:library:1.1.0")
+
+    implementation ("androidx.room:room-runtime:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
+
 }

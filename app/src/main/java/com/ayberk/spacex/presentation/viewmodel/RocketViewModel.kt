@@ -5,15 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ayberk.spacex.common.Resource
+import com.ayberk.spacex.data.models.rockets.FavoriteRockets
 import com.ayberk.spacex.data.retrofit.RetrofitRepository
 import com.ayberk.spacex.data.models.rockets.Rockets
 import com.ayberk.spacex.data.models.rockets.RocketsItem
+import com.ayberk.spacex.presentation.ui.RocketEvent
+import com.ayberk.spacex.usecase.SpaceUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RocketViewModel @Inject constructor(private val repository: RetrofitRepository) : ViewModel(){
+class RocketViewModel @Inject constructor(private val repository: RetrofitRepository,private val spaceUseCases: SpaceUseCases) : ViewModel(){
 
     private val _rocketState = MutableLiveData<RocketState>()
     val rocketState : LiveData<RocketState> get() = _rocketState
@@ -45,6 +48,19 @@ class RocketViewModel @Inject constructor(private val repository: RetrofitReposi
                         isLoading = false,
                         errorMessage = errorMessage
                     )
+                }
+            }
+        }
+    }
+    private suspend fun upsertRockets(rocket: FavoriteRockets) {
+        spaceUseCases.upsertRocket(rocket = rocket)
+    }
+
+    fun onEvent(event: RocketEvent) {
+        when (event) {
+            is RocketEvent.UpsertDeleteArticle -> {
+                viewModelScope.launch {
+                    upsertRockets(event.rocket)
                 }
             }
         }

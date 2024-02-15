@@ -1,12 +1,15 @@
 package com.ayberk.spacex.data.models.rockets
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class RocketsItem(
+    val id: String,
     val auto_update: Boolean?,
-    val capsules: List<String>?,
     val cores: List<com.ayberk.spacex.data.models.rockets.Core>?,
     val crew: List<String>?,
     val date_local: String?,
@@ -17,7 +20,6 @@ data class RocketsItem(
     val failures: List<com.ayberk.spacex.data.models.rockets.Failure>?,
     val fairings: com.ayberk.spacex.data.models.rockets.Fairings?,
     val flight_number: Int?,
-    val id: String?,
     val launch_library_id: String?,
     val launchpad: String?,
     val links: com.ayberk.spacex.data.models.rockets.Links?,
