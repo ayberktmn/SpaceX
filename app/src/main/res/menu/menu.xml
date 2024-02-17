@@ -9,4 +9,8 @@
         android:id="@+id/astronaut"
         android:icon="@drawable/astronaut"
         android:title="@string/menuCrew" />
+    <item
+        android:id="@+id/favorite"
+        android:icon="@drawable/favorite"
+        android:title="@string/menufavorite" />
 </menu>

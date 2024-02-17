@@ -11,15 +11,18 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ayberk.spacex.data.models.rockets.FavoriteRockets
 import com.ayberk.spacex.databinding.FragmentRocketsBinding
 import com.ayberk.spacex.data.models.rockets.Rockets
 import com.ayberk.spacex.data.models.rockets.RocketsItem
 import com.ayberk.spacex.presentation.viewmodel.RocketViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RocketsFragment : Fragment() {
@@ -29,7 +32,7 @@ class RocketsFragment : Fragment() {
 
     private val viewModel: RocketViewModel by viewModels()
     private lateinit var rocketAdapter: RocketAdapter
-
+    private lateinit var event: (RocketEvent) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,14 +90,16 @@ class RocketsFragment : Fragment() {
     private fun setupRecyclerView(rocketsList: List<com.ayberk.spacex.data.models.rockets.RocketsItem>) {
         // RecyclerView'a adapter atanır
         rocketAdapter = RocketAdapter(
-            onDetailsClick = {
-                val action = RocketsFragmentDirections.actionRocketsFragmentToDetailsFragment(it)
+            onDetailsClick = { rocket ->
+                val action = RocketsFragmentDirections.actionRocketsFragmentToDetailsFragment(rocket)
                 findNavController().navigate(action)
-                println("gönderilen rocket list: ${it}")
+                println("gönderilen rocket list: $rocket")
             },
+            event = { rocketEvent ->
+                viewModel.onEvent(rocketEvent)
+            }
         )
         binding.rcyclerRockets.adapter = rocketAdapter
-
         // RecyclerView'in boyutunu değiştirmeyecek şekilde sabitlenir
         binding.rcyclerRockets.setHasFixedSize(true)
 
@@ -103,8 +108,9 @@ class RocketsFragment : Fragment() {
         binding.rcyclerRockets.layoutManager = layoutManager
 
         // Adapter'a veri atanır
-        rocketAdapter.setrocketsList(rocketsList)
+        rocketAdapter.setRocketsList(rocketsList)
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

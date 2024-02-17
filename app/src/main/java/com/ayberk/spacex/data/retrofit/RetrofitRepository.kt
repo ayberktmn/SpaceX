@@ -1,13 +1,17 @@
 package com.ayberk.spacex.data.retrofit
 
 import com.ayberk.spacex.common.Resource
-import com.ayberk.spacex.data.models.crew.Crew
-import com.ayberk.spacex.data.models.dragons.Dragons
-import com.ayberk.spacex.data.models.rockets.Rockets
+import com.ayberk.spacex.data.models.rockets.FavoriteRockets
+import com.ayberk.spacex.data.room.SpaceRoomDAO
+import com.ayberk.spacex.data.room.SpaceRoomDB
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RetrofitRepository @Inject constructor(
     private val retrofitServiceInstance: RetrofitServiceInstance,
+    private val spaceRoomDB: SpaceRoomDB,
+    private val spaceRoomDao: SpaceRoomDAO
 ) {
     suspend fun getRockets(): Resource<com.ayberk.spacex.data.models.rockets.Rockets> {
         return try {
@@ -41,6 +45,25 @@ class RetrofitRepository @Inject constructor(
                 }
             } else {
                 Resource.Fail("HTTP error: ${response.code()}")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e)
+        }
+    }
+    suspend fun upsertRocket(favoriteRockets: FavoriteRockets) {
+        withContext(Dispatchers.IO) {
+            spaceRoomDB.spaceRoomDAOInterface().addRocket(favoriteRockets)
+        }
+    }
+
+    fun rocketFavori(): Resource<List<FavoriteRockets>> {
+        return try {
+            val response = spaceRoomDao.getAllRockets()
+
+            if (response.isNullOrEmpty()) {
+                Resource.Fail("Favorilerinizde Rocket bulunmamaktadır.")
+            } else {
+                Resource.Success(response)
             }
         } catch (e: Exception) {
             Resource.Error(e)

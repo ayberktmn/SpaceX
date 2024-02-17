@@ -19,13 +19,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardRocket"
+            android:id="@+id/cardrocketfav"
             android:layout_width="174dp"
             android:layout_height="164dp"
             app:cardCornerRadius="16dp">
 
             <ImageView
-                android:id="@+id/imgRocket"
+                android:id="@+id/imgrocketfav"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/rocket" />
@@ -33,7 +33,7 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/txtRocket"
+            android:id="@+id/txtrocketfav"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -43,14 +43,15 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-
         <ImageView
-            android:id="@+id/imgFavorite"
-            android:layout_width="52dp"
-            android:layout_height="30dp"
-            android:layout_gravity="right"
+            android:id="@+id/imgMark"
+            android:layout_width="56dp"
+            android:layout_height="49dp"
             android:paddingTop="5dp"
-            android:src="@drawable/favorite" />
+            android:layout_gravity="right"
+            android:src="@drawable/mark" />
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
