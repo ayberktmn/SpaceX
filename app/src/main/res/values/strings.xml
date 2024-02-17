@@ -5,8 +5,11 @@
 
     <string name="menuRockets">Rokets</string>
     <string name="menuCrew">Crew</string>
+    <string name="menufavorite">Favorite</string>
 
     <string name="toolbarText">Dragons</string>
 
+    <string name="favoritetoolbarText">Favorite Rockets</string>
 
-    </resources>
+
+</resources>

@@ -58,11 +58,13 @@ class RocketViewModel @Inject constructor(private val repository: RetrofitReposi
 
     fun onEvent(event: RocketEvent) {
         when (event) {
-            is RocketEvent.UpsertDeleteArticle -> {
+            is RocketEvent.UpsertDeleteRocket -> {
                 viewModelScope.launch {
                     upsertRockets(event.rocket)
                 }
             }
+
+            else -> {}
         }
     }
 }

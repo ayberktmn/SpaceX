@@ -50,8 +50,10 @@ class RocketAdapter(
 
                 binding.imgFavorite.setOnClickListener {
                     val id = rocket.id.toIntOrNull() ?: 0 // Varsayılan bir değer atayın
-                    println("Tıklandı : $id")
-                    event(RocketEvent.UpsertDeleteArticle(FavoriteRockets(id, rocket.name)))
+                    val imageUrl = rocket.links?.patch?.large
+                    val name = rocket.name
+                    event(RocketEvent.UpsertDeleteRocket(FavoriteRockets(id, imageUrl, name)))
+                    println("tıklandı")
                 }
             }
         }

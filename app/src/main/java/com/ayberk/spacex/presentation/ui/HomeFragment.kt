@@ -39,6 +39,7 @@ class HomeFragment : Fragment() {
                     when (newIndex) {
                         0 -> navigateToFragment(R.id.rocketsFragment)
                         1 -> navigateToFragment(R.id.crewFragment)
+                        2 -> navigateToFragment(R.id.favoriteFragment)
                     }
                     Log.d("bottom_bar", "Selected index: $newIndex, title: ${newTab.title}")
                 }
