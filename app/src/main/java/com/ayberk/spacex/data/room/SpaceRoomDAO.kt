@@ -21,4 +21,8 @@ interface SpaceRoomDAO {
 
     @Query("SELECT * FROM rocket_items")
     fun getAllRockets(): List<FavoriteRockets>
+
+    @Query("SELECT COUNT(*) FROM rocket_items WHERE id = :id")
+    fun checkIfDataExists(id: String): Int
+
 }

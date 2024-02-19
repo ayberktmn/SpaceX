@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "rocket_items")
 data class FavoriteRockets(
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "id")
-    val id: Int = 0,
+    val id: String,
 
     @ColumnInfo(name = "image")
     val image: String?,

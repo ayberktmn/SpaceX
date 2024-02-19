@@ -2,8 +2,6 @@ package com.ayberk.spacex.presentation.ui
 
 import RocketAdapter
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,18 +9,14 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ayberk.spacex.data.models.rockets.FavoriteRockets
 import com.ayberk.spacex.databinding.FragmentRocketsBinding
-import com.ayberk.spacex.data.models.rockets.Rockets
-import com.ayberk.spacex.data.models.rockets.RocketsItem
+import com.ayberk.spacex.data.room.SpaceRoomDAO
 import com.ayberk.spacex.presentation.viewmodel.RocketViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RocketsFragment : Fragment() {
@@ -32,7 +26,10 @@ class RocketsFragment : Fragment() {
 
     private val viewModel: RocketViewModel by viewModels()
     private lateinit var rocketAdapter: RocketAdapter
-    private lateinit var event: (RocketEvent) -> Unit
+
+    @Inject
+    lateinit var spaceRoomDAO: SpaceRoomDAO
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,6 +79,8 @@ class RocketsFragment : Fragment() {
         binding.lottieAnimationView.visibility = View.GONE
     }
 
+
+
     private fun showErrorToast(errorMessage: String) {
         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
     }
@@ -97,7 +96,8 @@ class RocketsFragment : Fragment() {
             },
             event = { rocketEvent ->
                 viewModel.onEvent(rocketEvent)
-            }
+            },
+            dataDao = spaceRoomDAO
         )
         binding.rcyclerRockets.adapter = rocketAdapter
         // RecyclerView'in boyutunu değiştirmeyecek şekilde sabitlenir

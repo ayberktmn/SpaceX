@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ayberk.spacex.databinding.FragmentFavoriteBinding
 import com.ayberk.spacex.presentation.viewmodel.viewmodelfav
@@ -52,7 +53,7 @@ class FavoriteFragment : Fragment() {
         favoriteAdapter = RocketFavoriteAdapter()
 
         binding.rcyclerRocketFav.setHasFixedSize(true)
-        val layoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
+        val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         binding.rcyclerRocketFav.layoutManager = layoutManager
         binding.rcyclerRocketFav.adapter = favoriteAdapter
     }

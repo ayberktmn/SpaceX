@@ -63,8 +63,6 @@ class RocketViewModel @Inject constructor(private val repository: RetrofitReposi
                     upsertRockets(event.rocket)
                 }
             }
-
-            else -> {}
         }
     }
 }
