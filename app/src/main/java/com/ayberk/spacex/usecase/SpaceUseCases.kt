@@ -5,5 +5,6 @@ import javax.inject.Inject
 
 @ViewModelScoped
 data class SpaceUseCases @Inject constructor(
-    val upsertRocket: UpsertRocket
+    val upsertRocket: UpsertRocket,
+    val clearRoom: ClearRoom
 )

@@ -56,6 +56,12 @@ class RetrofitRepository @Inject constructor(
         }
     }
 
+    suspend fun clearRoom() {
+        withContext(Dispatchers.IO) {
+            spaceRoomDB.spaceRoomDAOInterface().clearRockets()
+        }
+    }
+
     fun rocketFavori(): Resource<List<FavoriteRockets>> {
         return try {
             val response = spaceRoomDao.getAllRockets()

@@ -1,22 +1,28 @@
 package com.ayberk.spacex.presentation.ui
 
 import RocketFavoriteAdapter
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ayberk.spacex.R
+import com.ayberk.spacex.data.room.SpaceRoomDAO
 import com.ayberk.spacex.databinding.FragmentFavoriteBinding
 import com.ayberk.spacex.presentation.viewmodel.viewmodelfav
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment() {
@@ -26,6 +32,9 @@ class FavoriteFragment : Fragment() {
     private lateinit var favoriteAdapter: RocketFavoriteAdapter
 
     private val viewModelfav: viewmodelfav by viewModels()
+
+    @Inject
+    lateinit var spaceRoomDAO: SpaceRoomDAO
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +54,7 @@ class FavoriteFragment : Fragment() {
 
         setupRecyclerView()
         initObservers()
+        clearRockets()
 
         viewModelfav.getAllFavoriteRockets()
     }
@@ -65,6 +75,45 @@ class FavoriteFragment : Fragment() {
             }
         }
     }
+
+
+    fun clearRockets(){
+        binding.imgClear.setOnClickListener {
+            showConfirmationDialog()
+        }
+    }
+
+    private fun showConfirmationDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Favori Roketleri Sil")
+        builder.setMessage("Tüm favori roketleri silmek istediğinize emin misiniz?")
+        builder.setPositiveButton("Evet") { dialog, _ ->
+            viewModelfav.clearRoomIfNotEmpty()
+            observeFavoriteRockets()
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Hayır") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            // Pozitif düğme rengini değiştirelim
+            positiveButton?.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+        }
+
+        dialog.show()
+    }
+
+    private fun observeFavoriteRockets() {
+        viewModelfav.favoriteRocketsLiveData.observe(viewLifecycleOwner) {
+                // Eğer roket listesi boşsa, RecyclerView'ı güncelleyin
+                favoriteAdapter.updateList(emptyList())
+                Toast.makeText(requireContext(), "Rocket Listeniz Boş", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
