@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 class RocketAdapter(
     private val onDetailsClick: (RocketsItem) -> Unit,
     private val event: (RocketEvent) -> Unit,
-    private val dataDao: SpaceRoomDAO // Inject SpaceRoomDAO here
+    private val dataDao: SpaceRoomDAO
 ) : RecyclerView.Adapter<RocketAdapter.RocketViewHolder>() {
 
     private var rocketsList: List<RocketsItem>? = null
@@ -80,7 +80,7 @@ class RocketAdapter(
                     // Animasyonu görünür hale getirin ve oynatın
                     binding.lottieRocketFavorite.visibility = View.VISIBLE
                     binding.lottieRocketFavorite.playAnimation()
-
+                    binding.lottieRocketFavorite.speed = 2f
                     // Animasyon için bir AnimatorListener ekleyin
                     binding.lottieRocketFavorite.addAnimatorListener(object :
                         AnimatorListenerAdapter() {
