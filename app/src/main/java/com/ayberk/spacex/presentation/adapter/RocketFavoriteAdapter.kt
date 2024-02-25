@@ -1,6 +1,7 @@
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.util.recursiveFetchArrayMap
 import com.ayberk.spacex.R
 import com.ayberk.spacex.data.models.rockets.FavoriteRockets
 import com.ayberk.spacex.databinding.ItemRocketfavBinding
@@ -9,7 +10,9 @@ import com.bumptech.glide.Glide
 
 class RocketFavoriteAdapter() : RecyclerView.Adapter<RocketFavoriteAdapter.RocketFavoriteViewHolder>() {
 
-    private var rocketsfavoriteList: List<com.ayberk.spacex.data.models.rockets.FavoriteRockets>? = null
+    var rocketsfavoriteList: List<com.ayberk.spacex.data.models.rockets.FavoriteRockets>? = null
+    var onDeleteClickListener: ((FavoriteRockets) -> Unit)? = null
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RocketFavoriteViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -45,6 +48,9 @@ class RocketFavoriteAdapter() : RecyclerView.Adapter<RocketFavoriteAdapter.Rocke
                     .error(R.drawable.rocket)
                     .into(imgrocketfav)
 
+                imgDelete.setOnClickListener {
+                    onDeleteClickListener?.invoke(rocketFav)
+                }
             }
         }
     }

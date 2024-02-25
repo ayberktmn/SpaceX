@@ -55,6 +55,7 @@ class FavoriteFragment : Fragment() {
         setupRecyclerView()
         initObservers()
         clearRockets()
+        deleteRocket()
 
         viewModelfav.getAllFavoriteRockets()
     }
@@ -82,6 +83,15 @@ class FavoriteFragment : Fragment() {
             showConfirmationDialog()
         }
     }
+
+    fun deleteRocket(){
+        favoriteAdapter.onDeleteClickListener = { rocket ->
+            viewModelfav.deleteRockets(rocket)
+            favoriteAdapter.updateList(favoriteAdapter.rocketsfavoriteList?.filter { it != rocket } ?: emptyList())
+
+        }
+    }
+
 
     private fun showConfirmationDialog() {
         val builder = AlertDialog.Builder(requireContext())

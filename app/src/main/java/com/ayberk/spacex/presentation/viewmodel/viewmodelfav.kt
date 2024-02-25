@@ -47,4 +47,10 @@ class viewmodelfav @Inject constructor(
             onRocketListEmpty?.invoke() // Liste boşsa callback'i çağır
         }
     }
+
+    fun deleteRockets(rockets: FavoriteRockets) {
+        viewModelScope.launch {
+            spaceUseCases.deleteRockets(rockets)
+        }
+    }
 }
