@@ -59,16 +59,21 @@ class CrewDragonFragment : Fragment() {
             }
         }
         viewModelDragon.dragonState.observe(viewLifecycleOwner) { state ->
-            state.dragonList?.let { dragonList ->
-                if (dragonList.isNotEmpty()) {
+            if (state.isLoading) {
+                showLoadingIndicator()
+            } else{
+                hideLoadingIndicator()
+                state.dragonList?.let { dragonList ->
+                    if (dragonList.isNotEmpty()) {
                     setupDragonRecyclerView(dragonList)
-                } else {
+                    } else {
                     println("dragonList boş veya null.")
+                   }
                 }
-            }
-            state.errorMessage?.let {
-                showErrorToast(it)
-                println("Recycler error")
+                state.errorMessage?.let {
+                    showErrorToast(it)
+                    println("Recycler error")
+                }
             }
         }
     }
@@ -109,6 +114,17 @@ class CrewDragonFragment : Fragment() {
         // Adapter'a veri atanır
         dragonAdapter.setDragonList(dragonList)
     }
+
+    private fun showLoadingIndicator() {
+        // Show loading indicator
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingIndicator() {
+        // Hide loading indicator
+        binding.progressBar.visibility = View.GONE
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
