@@ -3,6 +3,8 @@ import android.animation.AnimatorListenerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.ayberk.spacex.R
 import com.ayberk.spacex.data.models.rockets.FavoriteRockets
@@ -20,9 +22,14 @@ class RocketAdapter(
     private val onDetailsClick: (RocketsItem) -> Unit,
     private val event: (RocketEvent) -> Unit,
     private val dataDao: SpaceRoomDAO
-) : RecyclerView.Adapter<RocketAdapter.RocketViewHolder>() {
+) : RecyclerView.Adapter<RocketAdapter.RocketViewHolder>(), Filterable {
 
     private var rocketsList: List<RocketsItem>? = null
+    private var rocketsFilteredList: List<RocketsItem>? = null
+
+    init {
+        rocketsFilteredList = rocketsList
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RocketViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -31,7 +38,7 @@ class RocketAdapter(
     }
 
     override fun onBindViewHolder(holder: RocketViewHolder, position: Int) {
-        rocketsList?.let { rockets ->
+        rocketsFilteredList?.let { rockets ->
             if (rockets.isNotEmpty()) {
                 val rocket = rockets[position]
                 holder.bind(rocket)
@@ -52,7 +59,7 @@ class RocketAdapter(
     }
 
     override fun getItemCount(): Int {
-        return rocketsList?.size ?: 0
+        return rocketsFilteredList?.size ?: 0
     }
 
     inner class RocketViewHolder(private val binding: ItemRocketsBinding) :
@@ -113,6 +120,33 @@ class RocketAdapter(
 
     fun setRocketsList(newList: List<RocketsItem>) {
         rocketsList = newList
+        rocketsFilteredList = newList
         notifyDataSetChanged()
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val filteredList = mutableListOf<RocketsItem>()
+                val searchText = constraint.toString().toLowerCase().trim()
+
+                rocketsList?.let { list ->
+                    for (rocket in list) {
+                        if (rocket.name?.toLowerCase()?.contains(searchText) == true) {
+                            filteredList.add(rocket)
+                        }
+                    }
+                }
+
+                val filterResults = FilterResults()
+                filterResults.values = filteredList
+                return filterResults
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                rocketsFilteredList = results?.values as List<RocketsItem>?
+                notifyDataSetChanged()
+            }
+        }
     }
 }

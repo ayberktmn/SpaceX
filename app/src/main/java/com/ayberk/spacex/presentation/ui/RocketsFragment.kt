@@ -3,8 +3,12 @@ package com.ayberk.spacex.presentation.ui
 import RocketAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -12,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ayberk.spacex.R
 import com.ayberk.spacex.databinding.FragmentRocketsBinding
 import com.ayberk.spacex.data.room.SpaceRoomDAO
 import com.ayberk.spacex.presentation.viewmodel.RocketViewModel
@@ -38,12 +43,25 @@ class RocketsFragment : Fragment() {
         _binding = FragmentRocketsBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            // Add onBackPressed callback logic here if needed
-        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {}
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        // SearchView'i ele al
+        binding.searchView.queryHint = "Search Rockets"
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+                if (!newText.isNullOrBlank()) {
+                    rocketAdapter.filter.filter(newText)
+                }
+                return true
+            }
+        })
         viewModel.getRockets()
         initObservers()
     }

@@ -2,6 +2,7 @@ package com.ayberk.spacex.data.retrofit
 
 import com.ayberk.spacex.common.Resource
 import com.ayberk.spacex.data.models.rockets.FavoriteRockets
+import com.ayberk.spacex.data.models.rockets.Rockets
 import com.ayberk.spacex.data.room.SpaceRoomDAO
 import com.ayberk.spacex.data.room.SpaceRoomDB
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +51,25 @@ class RetrofitRepository @Inject constructor(
             Resource.Error(e)
         }
     }
+
+    suspend fun getRocketLaunches(rocket: String): Resource<Rockets> {
+        return try {
+            val response = retrofitServiceInstance.getRocketLaunches(rocket)
+
+            if (response.isSuccessful) {
+                val rocketLaunchList = response.body()
+                if (rocketLaunchList != null) {
+                    Resource.Success(rocketLaunchList)
+                } else {
+                    Resource.Fail("Empty response body")
+                }
+            } else {
+                Resource.Fail("HTTP error: ${response.code()}")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e)
+        }
+    }
     suspend fun upsertRocket(favoriteRockets: FavoriteRockets) {
         withContext(Dispatchers.IO) {
             spaceRoomDB.spaceRoomDAOInterface().addRocket(favoriteRockets)
@@ -68,7 +88,7 @@ class RetrofitRepository @Inject constructor(
         }
     }
 
-    fun rocketFavori(): Resource<List<FavoriteRockets>> {
+ /*   fun rocketFavori(): Resource<List<FavoriteRockets>> {
         return try {
             val response = spaceRoomDao.getAllRockets()
 
@@ -80,7 +100,7 @@ class RetrofitRepository @Inject constructor(
         } catch (e: Exception) {
             Resource.Error(e)
         }
-    }
+    } */
 
     suspend fun getDragons(): Resource<com.ayberk.spacex.data.models.dragons.Dragons> {
         return try {

@@ -52,6 +52,8 @@ class RocketViewModel @Inject constructor(private val repository: RetrofitReposi
             }
         }
     }
+
+
     private suspend fun upsertRockets(rocket: FavoriteRockets) {
         spaceUseCases.upsertRocket(rocket = rocket)
     }
@@ -70,5 +72,6 @@ class RocketViewModel @Inject constructor(private val repository: RetrofitReposi
 data class RocketState(
     val isLoading: Boolean = false,
     val rocketsList: List<com.ayberk.spacex.data.models.rockets.RocketsItem> = emptyList(),
+    val launchrocketsList: List<com.ayberk.spacex.data.models.rockets.RocketsItem> = emptyList(),
     val errorMessage: String? = null
 )
