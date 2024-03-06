@@ -128,11 +128,12 @@ class RocketAdapter(
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val filteredList = mutableListOf<RocketsItem>()
-                val searchText = constraint.toString().toLowerCase().trim()
+
+                val searchText = constraint?.toString()?.toLowerCase()?.trim() ?: ""
 
                 rocketsList?.let { list ->
                     for (rocket in list) {
-                        if (rocket.name?.toLowerCase()?.contains(searchText) == true) {
+                        if (searchText.isEmpty() || rocket.name?.toLowerCase()?.contains(searchText) == true) {
                             filteredList.add(rocket)
                         }
                     }
@@ -145,6 +146,9 @@ class RocketAdapter(
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 rocketsFilteredList = results?.values as List<RocketsItem>?
+                if (constraint.isNullOrBlank()) {
+                    rocketsFilteredList = rocketsList // Arama kriteri boşsa, tüm roketleri göster
+                }
                 notifyDataSetChanged()
             }
         }

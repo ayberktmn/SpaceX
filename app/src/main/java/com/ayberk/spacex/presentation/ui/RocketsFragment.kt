@@ -35,7 +35,6 @@ class RocketsFragment : Fragment() {
     @Inject
     lateinit var spaceRoomDAO: SpaceRoomDAO
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -55,8 +54,9 @@ class RocketsFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-
-                if (!newText.isNullOrBlank()) {
+                if (newText.isNullOrBlank()) {
+                    rocketAdapter.setRocketsList(viewModel.rocketState.value?.rocketsList ?: emptyList())
+                } else {
                     rocketAdapter.filter.filter(newText)
                 }
                 return true
@@ -65,6 +65,7 @@ class RocketsFragment : Fragment() {
         viewModel.getRockets()
         initObservers()
     }
+
 
     private fun initObservers() {
         viewModel.rocketState.observe(viewLifecycleOwner) { state ->
