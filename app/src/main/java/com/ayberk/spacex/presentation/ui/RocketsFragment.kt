@@ -1,6 +1,7 @@
 package com.ayberk.spacex.presentation.ui
 
 import RocketAdapter
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,6 +9,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.addCallback
@@ -62,10 +64,15 @@ class RocketsFragment : Fragment() {
                 return true
             }
         })
+
+        binding.searchView.setOnCloseListener {
+            hideKeyboard() // Klavyeyi kapat
+            false
+        }
+
         viewModel.getRockets()
         initObservers()
     }
-
 
     private fun initObservers() {
         viewModel.rocketState.observe(viewLifecycleOwner) { state ->
@@ -104,6 +111,13 @@ class RocketsFragment : Fragment() {
         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
     }
 
+    private fun hideKeyboard() {
+        val inputMethodManager = requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val currentFocusedView = requireActivity().currentFocus
+        if (currentFocusedView != null) {
+            inputMethodManager.hideSoftInputFromWindow(currentFocusedView.windowToken, 0)
+        }
+    }
 
     private fun setupRecyclerView(rocketsList: List<com.ayberk.spacex.data.models.rockets.RocketsItem>) {
         // RecyclerView'a adapter atanır

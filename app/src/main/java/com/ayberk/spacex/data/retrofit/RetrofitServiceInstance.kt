@@ -14,6 +14,5 @@ interface RetrofitServiceInstance {
 
     @GET("v4/dragons")
     suspend fun getDragons(): Response<com.ayberk.spacex.data.models.dragons.Dragons>
-    @GET("v4/launches")
-    suspend fun getRocketLaunches(@Query("name") rocket: String): Response<Rockets>
+
 }

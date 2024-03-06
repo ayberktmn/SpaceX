@@ -52,24 +52,7 @@ class RetrofitRepository @Inject constructor(
         }
     }
 
-    suspend fun getRocketLaunches(rocket: String): Resource<Rockets> {
-        return try {
-            val response = retrofitServiceInstance.getRocketLaunches(rocket)
 
-            if (response.isSuccessful) {
-                val rocketLaunchList = response.body()
-                if (rocketLaunchList != null) {
-                    Resource.Success(rocketLaunchList)
-                } else {
-                    Resource.Fail("Empty response body")
-                }
-            } else {
-                Resource.Fail("HTTP error: ${response.code()}")
-            }
-        } catch (e: Exception) {
-            Resource.Error(e)
-        }
-    }
     suspend fun upsertRocket(favoriteRockets: FavoriteRockets) {
         withContext(Dispatchers.IO) {
             spaceRoomDB.spaceRoomDAOInterface().addRocket(favoriteRockets)
