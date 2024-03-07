@@ -1,11 +1,9 @@
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.util.recursiveFetchArrayMap
 import com.ayberk.spacex.R
 import com.ayberk.spacex.data.models.rockets.FavoriteRockets
 import com.ayberk.spacex.databinding.ItemRocketfavBinding
-import com.ayberk.spacex.presentation.ui.RocketEvent
 import com.bumptech.glide.Glide
 
 class RocketFavoriteAdapter() : RecyclerView.Adapter<RocketFavoriteAdapter.RocketFavoriteViewHolder>() {

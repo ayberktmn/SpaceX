@@ -1,10 +1,12 @@
 package com.ayberk.spacex.data.retrofit
 
 import com.ayberk.spacex.common.Resource
+import com.ayberk.spacex.data.models.crew.CrewFavorite
 import com.ayberk.spacex.data.models.rockets.FavoriteRockets
 import com.ayberk.spacex.data.models.rockets.Rockets
 import com.ayberk.spacex.data.room.SpaceRoomDAO
 import com.ayberk.spacex.data.room.SpaceRoomDB
+import com.ayberk.spacex.data.room.crewRoom.CrewRoomDB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -12,7 +14,7 @@ import javax.inject.Inject
 class RetrofitRepository @Inject constructor(
     private val retrofitServiceInstance: RetrofitServiceInstance,
     private val spaceRoomDB: SpaceRoomDB,
-    private val spaceRoomDao: SpaceRoomDAO
+    private val crewRoomDB: CrewRoomDB,
 ) {
     suspend fun getRockets(): Resource<com.ayberk.spacex.data.models.rockets.Rockets> {
         return try {
@@ -68,6 +70,12 @@ class RetrofitRepository @Inject constructor(
     suspend fun deleteRocket(deleteRocket: FavoriteRockets) {
         withContext(Dispatchers.IO) {
             spaceRoomDB.spaceRoomDAOInterface().deleteRocket(deleteRocket)
+        }
+    }
+
+    suspend fun upsertCrew(crewFavorite: CrewFavorite) {
+        withContext(Dispatchers.IO) {
+            crewRoomDB.crewRoomDAOInterface().addCrew(crewFavorite)
         }
     }
 

@@ -11,7 +11,7 @@ import com.ayberk.spacex.data.models.rockets.FavoriteRockets
 import com.ayberk.spacex.data.models.rockets.RocketsItem
 import com.ayberk.spacex.data.room.SpaceRoomDAO
 import com.ayberk.spacex.databinding.ItemRocketsBinding
-import com.ayberk.spacex.presentation.ui.RocketEvent
+import com.ayberk.spacex.usecase.event.RocketEvent
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

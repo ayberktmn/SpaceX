@@ -7,9 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.ayberk.spacex.common.Resource
 import com.ayberk.spacex.data.models.rockets.FavoriteRockets
 import com.ayberk.spacex.data.retrofit.RetrofitRepository
-import com.ayberk.spacex.data.models.rockets.Rockets
-import com.ayberk.spacex.data.models.rockets.RocketsItem
-import com.ayberk.spacex.presentation.ui.RocketEvent
+import com.ayberk.spacex.usecase.event.RocketEvent
 import com.ayberk.spacex.usecase.SpaceUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -52,7 +50,6 @@ class RocketViewModel @Inject constructor(private val repository: RetrofitReposi
             }
         }
     }
-
 
     private suspend fun upsertRockets(rocket: FavoriteRockets) {
         spaceUseCases.upsertRocket(rocket = rocket)

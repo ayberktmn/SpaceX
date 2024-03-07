@@ -7,6 +7,9 @@ import com.ayberk.spacex.data.retrofit.RetrofitRepository
 import com.ayberk.spacex.data.retrofit.RetrofitServiceInstance
 import com.ayberk.spacex.data.room.SpaceRoomDAO
 import com.ayberk.spacex.data.room.SpaceRoomDB
+import com.ayberk.spacex.data.room.crewRoom.CrewRoomDAO
+import com.ayberk.spacex.data.room.crewRoom.CrewRoomDB
+import com.ayberk.spacex.usecase.UpsertCrew
 import com.ayberk.spacex.usecase.UpsertRocket
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -67,6 +70,31 @@ class AppModule {
     fun provideSpaceRoomDAO(spaceRoomDB: SpaceRoomDB): SpaceRoomDAO {
         return spaceRoomDB.spaceRoomDAOInterface()
     }
+
+
+
+
+
+    @Provides
+    @Singleton
+    fun provideRoomDatabase2(@ApplicationContext context: Context): CrewRoomDB {
+        return Room.databaseBuilder(
+            context,
+            CrewRoomDB::class.java,
+            "crewdatabase.db"
+        ).build()
+    }
+
+    @Provides
+    fun provideCrewRoomDAO(crewRoomDB: CrewRoomDB): CrewRoomDAO {
+        return crewRoomDB.crewRoomDAOInterface()
+    }
+
+    @Provides
+    fun provideUpsertCrew(retrofitRepository: RetrofitRepository): UpsertCrew {
+        return UpsertCrew(retrofitRepository)
+    }
+
     @Provides
     fun provideUpsertRocket(retrofitRepository: RetrofitRepository): UpsertRocket {
         return UpsertRocket(retrofitRepository)

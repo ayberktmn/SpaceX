@@ -7,15 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayberk.spacex.databinding.FragmentCrewdragonBinding
 import com.ayberk.spacex.presentation.adapter.CrewAdapter
 import com.ayberk.spacex.presentation.adapter.DragonAdapter
 import com.ayberk.spacex.data.models.crew.CrewItem
 import com.ayberk.spacex.data.models.dragons.DragonsItem
+import com.ayberk.spacex.data.room.SpaceRoomDAO
 import com.ayberk.spacex.presentation.viewmodel.CrewViewModel
 import com.ayberk.spacex.presentation.viewmodel.DragonViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CrewDragonFragment : Fragment() {
@@ -28,6 +31,9 @@ class CrewDragonFragment : Fragment() {
 
     private val viewModelDragon: DragonViewModel by viewModels()
     private lateinit var dragonAdapter: DragonAdapter
+
+    @Inject
+    lateinit var spaceRoomDAO: SpaceRoomDAO
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,9 +89,13 @@ class CrewDragonFragment : Fragment() {
     }
 
 
-    private fun setupRecyclerView(rocketsList: List<com.ayberk.spacex.data.models.crew.CrewItem>) {
-        // RecyclerView'a adapter atanır
-        crewAdapter = CrewAdapter()
+    private fun setupRecyclerView(crewList: List<com.ayberk.spacex.data.models.crew.CrewItem>) {
+        crewAdapter = CrewAdapter(
+            event = { crewEvent ->
+                viewModel.onEvent(crewEvent)
+            },
+            dataDao =  spaceRoomDAO
+        )
         binding.rcyclerCrew.adapter = crewAdapter
 
         // RecyclerView'in boyutunu değiştirmeyecek şekilde sabitlenir
@@ -96,7 +106,7 @@ class CrewDragonFragment : Fragment() {
         binding.rcyclerCrew.layoutManager = lmHorizontal
 
         // Adapter'a veri atanır
-        crewAdapter.setcrewList(rocketsList)
+        crewAdapter.setcrewList(crewList)
     }
 
     private fun setupDragonRecyclerView(dragonList: List<com.ayberk.spacex.data.models.dragons.DragonsItem>) {

@@ -4,12 +4,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ayberk.spacex.R
+import com.ayberk.spacex.data.models.crew.CrewFavorite
 import com.ayberk.spacex.databinding.ItemCrewBinding
 import com.ayberk.spacex.data.models.crew.CrewItem
+import com.ayberk.spacex.data.models.rockets.FavoriteRockets
 import com.ayberk.spacex.data.models.rockets.RocketsItem
+import com.ayberk.spacex.data.room.SpaceRoomDAO
+import com.ayberk.spacex.usecase.event.CrewEvent
+import com.ayberk.spacex.usecase.event.RocketEvent
 import com.bumptech.glide.Glide
 
-class CrewAdapter : RecyclerView.Adapter<CrewAdapter.CrewViewHolder>() {
+class CrewAdapter(
+    private val event: (CrewEvent) -> Unit,
+    private val dataDao: SpaceRoomDAO
+) : RecyclerView.Adapter<CrewAdapter.CrewViewHolder>() {
 
     private var crewList: List<com.ayberk.spacex.data.models.crew.CrewItem>? = null
 
@@ -55,6 +63,14 @@ class CrewAdapter : RecyclerView.Adapter<CrewAdapter.CrewViewHolder>() {
                     "ESA"-> imgAgency.setImageResource(R.drawable.esa)
                     "JAXA"-> imgAgency.setImageResource(R.drawable.jaxa)
 
+                }
+
+                binding.imgCrewFavorite.setOnClickListener {
+                    val id = crew.id
+                    val imageUrl = crew.image
+                    val name = crew.name
+                    val agency = crew.agency
+                    event(CrewEvent.UpsertDeleteCrew(CrewFavorite(id, imageUrl, name,agency)))
                 }
             }
         }

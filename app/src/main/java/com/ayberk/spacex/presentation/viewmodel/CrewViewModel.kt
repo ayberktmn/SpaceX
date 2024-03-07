@@ -5,14 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ayberk.spacex.common.Resource
+import com.ayberk.spacex.data.models.crew.CrewFavorite
 import com.ayberk.spacex.data.retrofit.RetrofitRepository
 import com.ayberk.spacex.data.models.crew.CrewItem
+import com.ayberk.spacex.data.models.rockets.FavoriteRockets
+import com.ayberk.spacex.usecase.SpaceUseCases
+import com.ayberk.spacex.usecase.UpsertCrew
+import com.ayberk.spacex.usecase.event.CrewEvent
+import com.ayberk.spacex.usecase.event.RocketEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CrewViewModel @Inject constructor(private val repository: RetrofitRepository) : ViewModel() {
+class CrewViewModel @Inject constructor(private val repository: RetrofitRepository,private val spaceUseCases: SpaceUseCases) : ViewModel() {
 
     private val _crewState = MutableLiveData<CrewState>()
     val crewState : LiveData<CrewState> get() = _crewState
@@ -43,6 +49,20 @@ class CrewViewModel @Inject constructor(private val repository: RetrofitReposito
                         isLoading = false,
                         errorMessage = errorMessage
                     )
+                }
+            }
+        }
+    }
+
+    private suspend fun upsertCrew(crew: CrewFavorite) {
+        spaceUseCases.upsertCrew(crew)
+    }
+
+    fun onEvent(event: CrewEvent) {
+        when (event) {
+            is CrewEvent.UpsertDeleteCrew -> {
+                viewModelScope.launch {
+                    upsertCrew(event.crew)
                 }
             }
         }
