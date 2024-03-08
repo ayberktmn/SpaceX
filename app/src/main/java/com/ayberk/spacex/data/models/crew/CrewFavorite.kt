@@ -9,10 +9,10 @@ data class CrewFavorite(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: String,
-    @ColumnInfo(name = "name")
-    val name: String,
     @ColumnInfo(name = "image")
     val image: String,
+    @ColumnInfo(name = "name")
+    val name: String,
     @ColumnInfo(name = "agency")
     val agency: String
 )

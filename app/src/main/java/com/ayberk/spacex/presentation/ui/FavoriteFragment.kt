@@ -10,18 +10,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ayberk.spacex.R
 import com.ayberk.spacex.data.room.SpaceRoomDAO
 import com.ayberk.spacex.databinding.FragmentFavoriteBinding
-import com.ayberk.spacex.presentation.viewmodel.viewmodelfav
+import com.ayberk.spacex.presentation.adapter.CrewFavoriteAdapter
+import com.ayberk.spacex.presentation.viewmodel.CrewFavoriteViewModel
+import com.ayberk.spacex.presentation.viewmodel.CrewViewModel
+import com.ayberk.spacex.presentation.viewmodel.RocketFavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,8 +29,10 @@ class FavoriteFragment : Fragment() {
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
     private lateinit var favoriteAdapter: RocketFavoriteAdapter
+    private lateinit var crewfavoriteAdapter: CrewFavoriteAdapter
 
-    private val viewModelfav: viewmodelfav by viewModels()
+    private val viewModelfav: RocketFavoriteViewModel by viewModels()
+    private val viewModelfavcrew: CrewFavoriteViewModel by viewModels()
 
     @Inject
     lateinit var spaceRoomDAO: SpaceRoomDAO
@@ -52,15 +53,18 @@ class FavoriteFragment : Fragment() {
 
         }
 
-        setupRecyclerView()
+        setupRecyclerViewRocket()
+        setupRecyclerViewCrew()
+
         initObservers()
         clearRockets()
         deleteRocket()
 
         viewModelfav.getAllFavoriteRockets()
+        viewModelfavcrew.getAllFavoriteCrew()
     }
 
-    private fun setupRecyclerView() {
+    private fun setupRecyclerViewRocket() {
         favoriteAdapter = RocketFavoriteAdapter()
 
         binding.rcyclerRocketFav.setHasFixedSize(true)
@@ -69,10 +73,24 @@ class FavoriteFragment : Fragment() {
         binding.rcyclerRocketFav.adapter = favoriteAdapter
     }
 
+    private fun setupRecyclerViewCrew() {
+        crewfavoriteAdapter = CrewFavoriteAdapter()
+
+        binding.rcyclerfavcrew.setHasFixedSize(true)
+        val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        binding.rcyclerfavcrew.layoutManager = layoutManager
+        binding.rcyclerfavcrew.adapter = crewfavoriteAdapter
+    }
+
     private fun initObservers() {
         viewModelfav.favoriteRocketsLiveData.observe(viewLifecycleOwner) { rockets ->
             rockets?.let {
                 favoriteAdapter.updateList(it)
+            }
+        }
+        viewModelfavcrew.favoriteCrewLiveData.observe(viewLifecycleOwner) { crews ->
+            crews?.let {
+                crewfavoriteAdapter.updateCrewList(it)
             }
         }
     }

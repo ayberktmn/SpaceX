@@ -71,10 +71,6 @@ class AppModule {
         return spaceRoomDB.spaceRoomDAOInterface()
     }
 
-
-
-
-
     @Provides
     @Singleton
     fun provideRoomDatabase2(@ApplicationContext context: Context): CrewRoomDB {

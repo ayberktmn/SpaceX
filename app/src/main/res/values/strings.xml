@@ -10,6 +10,6 @@
     <string name="toolbarText">Dragons</string>
 
     <string name="favoritetoolbarText">Favorite Rockets</string>
-
+    <string name="favoritecrewtoolbarText">Favorite Crews</string>
 
 </resources>

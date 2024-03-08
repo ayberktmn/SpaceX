@@ -1,13 +1,13 @@
 package com.ayberk.spacex.presentation.viewmodel
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ayberk.spacex.data.models.crew.CrewFavorite
 import com.ayberk.spacex.data.models.rockets.FavoriteRockets
-import com.ayberk.spacex.data.retrofit.RetrofitRepository
 import com.ayberk.spacex.data.room.SpaceRoomDAO
+import com.ayberk.spacex.data.room.crewRoom.CrewRoomDAO
 import com.ayberk.spacex.usecase.SpaceUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,41 +16,41 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class viewmodelfav @Inject constructor(
-    private val spaceRoomDAO: SpaceRoomDAO,
+class CrewFavoriteViewModel @Inject constructor(
+    private val roomDAO: CrewRoomDAO,
     private val spaceUseCases: SpaceUseCases
 ) : ViewModel() {
 
-    private val _favoriteRocketsLiveData = MutableLiveData<List<FavoriteRockets>>()
-    val favoriteRocketsLiveData: LiveData<List<FavoriteRockets>> = _favoriteRocketsLiveData
-    var onRocketListEmpty: (() -> Unit)? = null
+    private val _favoriteCrewLiveData = MutableLiveData<List<CrewFavorite>>()
+    val favoriteCrewLiveData: LiveData<List<CrewFavorite>> = _favoriteCrewLiveData
+    var onCrewListEmpty: (() -> Unit)? = null
 
     init {
-        getAllFavoriteRockets()
+        getAllFavoriteCrew()
     }
 
-    fun getAllFavoriteRockets() {
+    fun getAllFavoriteCrew() {
         viewModelScope.launch {
             val rockets = withContext(Dispatchers.IO) {
-                spaceRoomDAO.getAllRockets()
+                roomDAO.getAllCrew()
             }
-            _favoriteRocketsLiveData.postValue(rockets)
+            _favoriteCrewLiveData.postValue(rockets)
         }
     }
 
     fun clearRoomIfNotEmpty() {
-        if (favoriteRocketsLiveData.value?.isNotEmpty() == true) {
+        if (favoriteCrewLiveData.value?.isNotEmpty() == true) {
             viewModelScope.launch {
                 spaceUseCases.clearRoom()
             }
         } else {
-            onRocketListEmpty?.invoke() // Liste boşsa callback'i çağır
+            onCrewListEmpty?.invoke() // Liste boşsa callback'i çağır
         }
     }
 
-    fun deleteRockets(rockets: FavoriteRockets) {
+    fun deleteCrew(crews: CrewFavorite) {
         viewModelScope.launch {
-            spaceUseCases.deleteRockets(rockets)
+          //  spaceUseCases.deleteCrew(crews)
         }
     }
 }
