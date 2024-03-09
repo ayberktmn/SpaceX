@@ -79,6 +79,18 @@ class RetrofitRepository @Inject constructor(
         }
     }
 
+    suspend fun clearRoomCrew() {
+        withContext(Dispatchers.IO) {
+            crewRoomDB.crewRoomDAOInterface().clearCrew()
+        }
+    }
+
+    suspend fun deleteCrew(deleteCrew: CrewFavorite) {
+        withContext(Dispatchers.IO) {
+            crewRoomDB.crewRoomDAOInterface().deleteCrew(deleteCrew)
+        }
+    }
+
  /*   fun rocketFavori(): Resource<List<FavoriteRockets>> {
         return try {
             val response = spaceRoomDao.getAllRockets()

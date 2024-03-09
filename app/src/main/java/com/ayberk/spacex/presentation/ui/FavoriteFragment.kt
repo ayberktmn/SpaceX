@@ -60,6 +60,9 @@ class FavoriteFragment : Fragment() {
         clearRockets()
         deleteRocket()
 
+        clearCrew()
+        deleteCrew()
+
         viewModelfav.getAllFavoriteRockets()
         viewModelfavcrew.getAllFavoriteCrew()
     }
@@ -102,10 +105,24 @@ class FavoriteFragment : Fragment() {
         }
     }
 
+    fun clearCrew(){
+        binding.imgCrewClear.setOnClickListener {
+            showConfirmationDialogCrew()
+        }
+    }
+
     fun deleteRocket(){
         favoriteAdapter.onDeleteClickListener = { rocket ->
             viewModelfav.deleteRockets(rocket)
             favoriteAdapter.updateList(favoriteAdapter.rocketsfavoriteList?.filter { it != rocket } ?: emptyList())
+
+        }
+    }
+
+    fun deleteCrew(){
+        crewfavoriteAdapter.onDeleteClickListener = { crew ->
+            viewModelfavcrew.deleteCrew(crew)
+            crewfavoriteAdapter.updateCrewList(crewfavoriteAdapter.crewfavoriteList?.filter { it != crew } ?: emptyList())
 
         }
     }
@@ -134,11 +151,42 @@ class FavoriteFragment : Fragment() {
         dialog.show()
     }
 
+    private fun showConfirmationDialogCrew() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Favori Görevlileri Sil")
+        builder.setMessage("Tüm favori görevlileri silmek istediğinize emin misiniz?")
+        builder.setPositiveButton("Evet") { dialog, _ ->
+            viewModelfavcrew.clearRoomIfNotEmpty()
+            observeFavoriteCrews()
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Hayır") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            // Pozitif düğme rengini değiştirelim
+            positiveButton?.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+        }
+
+        dialog.show()
+    }
+
     private fun observeFavoriteRockets() {
         viewModelfav.favoriteRocketsLiveData.observe(viewLifecycleOwner) {
                 // Eğer roket listesi boşsa, RecyclerView'ı güncelleyin
                 favoriteAdapter.updateList(emptyList())
                 Toast.makeText(requireContext(), "Rocket Listeniz Boş", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun observeFavoriteCrews() {
+        viewModelfavcrew.favoriteCrewLiveData.observe(viewLifecycleOwner) {
+            // Eğer roket listesi boşsa, RecyclerView'ı güncelleyin
+            crewfavoriteAdapter.updateCrewList(emptyList())
+            Toast.makeText(requireContext(), "Görevli Listeniz Boş", Toast.LENGTH_SHORT).show()
         }
     }
 

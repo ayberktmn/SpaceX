@@ -15,6 +15,7 @@ import com.ayberk.spacex.presentation.adapter.DragonAdapter
 import com.ayberk.spacex.data.models.crew.CrewItem
 import com.ayberk.spacex.data.models.dragons.DragonsItem
 import com.ayberk.spacex.data.room.SpaceRoomDAO
+import com.ayberk.spacex.data.room.crewRoom.CrewRoomDAO
 import com.ayberk.spacex.presentation.viewmodel.CrewViewModel
 import com.ayberk.spacex.presentation.viewmodel.DragonViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +34,7 @@ class CrewDragonFragment : Fragment() {
     private lateinit var dragonAdapter: DragonAdapter
 
     @Inject
-    lateinit var spaceRoomDAO: SpaceRoomDAO
+    lateinit var crewRoomDAO: CrewRoomDAO
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,13 +89,12 @@ class CrewDragonFragment : Fragment() {
         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
     }
 
-
     private fun setupRecyclerView(crewList: List<com.ayberk.spacex.data.models.crew.CrewItem>) {
         crewAdapter = CrewAdapter(
             event = { crewEvent ->
                 viewModel.onEvent(crewEvent)
             },
-            dataDao =  spaceRoomDAO
+            crewRoomDAO
         )
         binding.rcyclerCrew.adapter = crewAdapter
 

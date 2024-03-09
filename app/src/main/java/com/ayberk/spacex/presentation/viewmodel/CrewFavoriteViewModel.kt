@@ -41,7 +41,7 @@ class CrewFavoriteViewModel @Inject constructor(
     fun clearRoomIfNotEmpty() {
         if (favoriteCrewLiveData.value?.isNotEmpty() == true) {
             viewModelScope.launch {
-                spaceUseCases.clearRoom()
+                spaceUseCases.clearRoomCrew()
             }
         } else {
             onCrewListEmpty?.invoke() // Liste boşsa callback'i çağır
@@ -50,7 +50,7 @@ class CrewFavoriteViewModel @Inject constructor(
 
     fun deleteCrew(crews: CrewFavorite) {
         viewModelScope.launch {
-          //  spaceUseCases.deleteCrew(crews)
+            spaceUseCases.deleteCrew(crews)
         }
     }
 }

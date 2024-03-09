@@ -8,5 +8,8 @@ data class SpaceUseCases @Inject constructor(
     val upsertRocket: UpsertRocket,
     val clearRoom: ClearRoom,
     val deleteRockets: DeleteRockets,
-    val upsertCrew: UpsertCrew
+    val upsertCrew: UpsertCrew,
+    val deleteCrew: DeleteCrew,
+    val clearRoomCrew: ClearRoomCrew,
+
 )

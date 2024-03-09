@@ -9,7 +9,6 @@ import com.ayberk.spacex.data.models.rockets.FavoriteRockets
 
 @Dao
 interface SpaceRoomDAO {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addRocket(rocket: FavoriteRockets)
 

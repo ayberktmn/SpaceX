@@ -49,16 +49,23 @@
 
             <ImageView
                 android:id="@+id/imgfavAgency"
-                android:layout_width="78dp"
+                android:layout_width="48dp"
                 android:layout_height="42dp"
                 android:background="@color/transparent"
                 android:src="@drawable/info" />
 
             <ImageView
                 android:id="@+id/imgfavCrew"
-                android:layout_width="match_parent"
+                android:layout_width="72dp"
                 android:layout_height="40dp"
                 app:srcCompat="@drawable/crewfavorite" />
+
+            <ImageView
+                android:id="@+id/imgdeleteCrew"
+                android:layout_width="123dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/delete" />
         </LinearLayout>
 
     </LinearLayout>

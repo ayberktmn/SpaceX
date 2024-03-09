@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 class CrewFavoriteAdapter: RecyclerView.Adapter<CrewFavoriteAdapter.CrewFavoriteViewHolder>() {
 
     var crewfavoriteList: List<CrewFavorite>? = null
-    var onDeleteClickListener: ((FavoriteRockets) -> Unit)? = null
+    var onDeleteClickListener: ((CrewFavorite) -> Unit)? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -57,9 +57,11 @@ class CrewFavoriteAdapter: RecyclerView.Adapter<CrewFavoriteAdapter.CrewFavorite
                     "SpaceX"-> imgfavAgency.setImageResource(R.drawable.spacex)
                     "ESA"-> imgfavAgency.setImageResource(R.drawable.esa)
                     "JAXA"-> imgfavAgency.setImageResource(R.drawable.jaxa)
-
                 }
 
+                imgdeleteCrew.setOnClickListener {
+                    onDeleteClickListener?.invoke(crewFav)
+                }
             }
         }
     }

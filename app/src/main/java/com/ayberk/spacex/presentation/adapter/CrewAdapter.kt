@@ -1,6 +1,9 @@
 package com.ayberk.spacex.presentation.adapter
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ayberk.spacex.R
@@ -10,13 +13,18 @@ import com.ayberk.spacex.data.models.crew.CrewItem
 import com.ayberk.spacex.data.models.rockets.FavoriteRockets
 import com.ayberk.spacex.data.models.rockets.RocketsItem
 import com.ayberk.spacex.data.room.SpaceRoomDAO
+import com.ayberk.spacex.data.room.crewRoom.CrewRoomDAO
 import com.ayberk.spacex.usecase.event.CrewEvent
 import com.ayberk.spacex.usecase.event.RocketEvent
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CrewAdapter(
     private val event: (CrewEvent) -> Unit,
-    private val dataDao: SpaceRoomDAO
+    private val CrewdataDao: CrewRoomDAO
 ) : RecyclerView.Adapter<CrewAdapter.CrewViewHolder>() {
 
     private var crewList: List<com.ayberk.spacex.data.models.crew.CrewItem>? = null
@@ -35,9 +43,22 @@ class CrewAdapter(
     }
 
     override fun onBindViewHolder(holder: CrewViewHolder, position: Int) {
-        crewList?.let {
-            if (it.isNotEmpty()) {
-                holder.bind(it[position])
+        crewList?.let { crews ->
+            if (crews.isNotEmpty()) {
+                val rocket = crews[position]
+                holder.bind(rocket)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val id = rocket.id
+                    val isFavorite = CrewdataDao.checkIfDataExists(id) > 0
+                    withContext(Dispatchers.Main) {
+                        if (isFavorite) {
+                            holder.bindFavoriteState(R.drawable.crewfavorite, false)
+                        } else {
+                            holder.bindFavoriteState(R.drawable.crewaddfavorite, true)
+                        }
+                    }
+                }
             }
         }
     }
@@ -71,8 +92,36 @@ class CrewAdapter(
                     val name = crew.name
                     val agency = crew.agency
                     event(CrewEvent.UpsertDeleteCrew(CrewFavorite(id, imageUrl, name,agency)))
+
+                    binding.lottieAnimationCrewView.visibility = View.VISIBLE
+                    binding.lottieAnimationCrewView.playAnimation()
+                    binding.lottieAnimationCrewView.speed = 2f
+                    // Animasyon için bir AnimatorListener ekleyin
+                    binding.lottieAnimationCrewView.addAnimatorListener(object :
+                        AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator) {
+                            // Animasyon tamamlandığında ImageView'ı gizle
+                            binding.lottieAnimationCrewView.visibility = View.GONE
+
+                            // Favori durumunu güncelleyin
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val isFavorite = CrewdataDao.checkIfDataExists(id) > 0
+                                withContext(Dispatchers.Main) {
+                                    if (isFavorite) {
+                                        bindFavoriteState(R.drawable.crewfavorite, false)
+                                    } else {
+                                        bindFavoriteState(R.drawable.crewaddfavorite, true)
+                                    }
+                                }
+                            }
+                        }
+                    })
                 }
             }
+        }
+        fun bindFavoriteState(imageResource: Int, isClickable: Boolean) {
+            binding.imgCrewFavorite.setImageResource(imageResource)
+            binding.imgCrewFavorite.isClickable = isClickable
         }
     }
 
